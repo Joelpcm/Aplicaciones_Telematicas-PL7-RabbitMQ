@@ -27,8 +27,30 @@ namespace Consumer
                     consumer.Received += (model, ea) =>
                     {
                         var body = ea.Body.ToArray();
-                        var message = Encoding.UTF8.GetString(body.ToArray());
+                        var message = Encoding.UTF8.GetString(body);
                         Console.WriteLine("Recibido {0}", message);
+
+                        // Dividimos el mensaje para obtener el número
+                        string[] parts = message.Split('-');
+                        if (parts.Length >= 3)
+                        {
+                            // Extraemos el número y lo convertimos a entero
+                            string numberPart = parts[2].Trim();
+                            if (int.TryParse(numberPart, out int taskNumber))
+                            {
+                                Console.WriteLine($"Ejecutando tarea número: {taskNumber}");
+
+                                // Simulamos la ejecución de la tarea
+                                Console.WriteLine($"Iniciando ejecución de la tarea {taskNumber}...");
+                                Thread.Sleep(taskNumber * 1000); // Simulamos el tiempo de ejecución según el número
+                                Console.WriteLine($"Tarea {taskNumber} completada exitosamente.");
+                            }
+                            else
+                            {
+                                Console.WriteLine("No se pudo extraer un número válido del mensaje.");
+                            }
+                        }
+
                     };
                     channel.BasicConsume(queue: "ColaAT",
                                       autoAck: true,

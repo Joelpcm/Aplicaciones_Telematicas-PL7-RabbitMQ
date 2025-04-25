@@ -22,8 +22,12 @@ namespace Producer
                     // En primer lugar se declara una cola
                     channel.QueueDeclare("ColaAT", false, false, false, null);
 
-                    // Se crea un mensaje
-                    string message = DateTime.Now.ToString() + " - Mensaje de prueba";
+                    // Generamos un número aleatorio entre 1 y 5
+                    Random random = new Random();
+                    int randomNumber = random.Next(1, 6); // Genera de 1 - 5
+
+                    // Se crea un mensaje que incluye el número aleatorio
+                    string message = $"{DateTime.Now} - Mensaje de prueba - {randomNumber.ToString()}";
                     byte[] body = Encoding.UTF8.GetBytes(message);
 
                     // Se publica un mensaje en la cola
