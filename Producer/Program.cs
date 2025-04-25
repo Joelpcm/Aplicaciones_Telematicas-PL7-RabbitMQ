@@ -1,4 +1,7 @@
-﻿namespace Producer
+﻿using RabbitMQ.Client.Events;
+using RabbitMQ.Client;
+
+namespace Producer
 {
     internal class Program
     {
