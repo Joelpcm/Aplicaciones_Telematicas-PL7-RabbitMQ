@@ -20,7 +20,8 @@ namespace Consumer
                 using (var channel = connection.CreateModel())
                 {
                     //En primer lugar se declara una cola
-                    channel.QueueDeclare("ColaAT", false, false, false, null);
+                    bool durable = true;
+                    channel.QueueDeclare("ColaTareas", durable, false, false, null);
 
                     // Se crea un consumidor
                     var consumer = new EventingBasicConsumer(channel);
@@ -58,7 +59,7 @@ namespace Consumer
                     // Para que la división de mensajes no se realice al principio
                     channel.BasicQos(0, 1, false);
                     // Se inicia el consumidor
-                    channel.BasicConsume(queue: "ColaAT",
+                    channel.BasicConsume(queue: "ColaTareas",
                                       autoAck: false, //valor false = consumidores deben enviar mensaje cuando terminan de procesar un mensaje
                                       consumer: consumer);
 

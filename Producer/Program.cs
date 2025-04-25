@@ -19,8 +19,13 @@ namespace Producer
                 // que es una abstracción para enviar y recibir información
                 using (var channel = connection.CreateModel())
                 {
+                    // Los mensajes se establecen como persistentes
+                    var properties = channel.CreateBasicProperties();
+                    properties.Persistent = true;
+
                     // En primer lugar se declara una cola
-                    channel.QueueDeclare("ColaAT", false, false, false, null);
+                    bool durable = true;
+                    channel.QueueDeclare("ColaTareas", durable, false, false, null);
 
                     // Para hacer 10 tareas de 1 segundo y 1 de 10 segundos
                     int Number_1 = 1;
@@ -35,7 +40,7 @@ namespace Producer
                         message = $"{DateTime.Now} - Mensaje de prueba - {Number_1.ToString()}";
                         body = Encoding.UTF8.GetBytes(message);
                         // Se publica un mensaje en la cola
-                        channel.BasicPublish("", "ColaAT", null, body);
+                        channel.BasicPublish("", "ColaTareas", properties, body);
                         Console.WriteLine("Enviado el mensaje: {0}", message);
                     }
                     // Se crea un mensaje que incluye el número
@@ -43,7 +48,7 @@ namespace Producer
                     body = Encoding.UTF8.GetBytes(message);
 
                     // Se publica un mensaje en la cola
-                    channel.BasicPublish("", "ColaAT", null, body);
+                    channel.BasicPublish("", "ColaTareas", properties, body);
                     Console.WriteLine("Enviado el mensaje: {0}", message);
                 }
             }
