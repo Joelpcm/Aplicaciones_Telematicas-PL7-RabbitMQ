@@ -19,9 +19,14 @@ namespace Consumer
                 // que es una abstracción para enviar y recibir información
                 using (var channel = connection.CreateModel())
                 {
-                    //En primer lugar se declara una cola
-                    bool durable = true;
-                    channel.QueueDeclare("ColaTareas", durable, false, false, null);
+                    // Se crea un intercambiador de tipo fanout denominado "Alertas"
+                    channel.ExchangeDeclare("Alertas", "fanout");
+
+                    // Se crea una cola temporal
+                    var queueName = channel.QueueDeclare().QueueName;
+
+                    // Se enlaza la cola con el intercambiador
+                    channel.QueueBind(queueName, "Alertas", "");
 
                     // Se crea un consumidor
                     var consumer = new EventingBasicConsumer(channel);
