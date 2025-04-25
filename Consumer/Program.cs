@@ -51,9 +51,15 @@ namespace Consumer
                             }
                         }
 
+                        // ACK del mensaje
+                        channel.BasicAck(ea.DeliveryTag, false);
+
                     };
+                    // Para que la división de mensajes no se realice al principio
+                    channel.BasicQos(0, 1, false);
+                    // Se inicia el consumidor
                     channel.BasicConsume(queue: "ColaAT",
-                                      autoAck: true,
+                                      autoAck: false, //valor false = consumidores deben enviar mensaje cuando terminan de procesar un mensaje
                                       consumer: consumer);
 
                     // Bloquea el consumidor a la espera de recibir mensajes

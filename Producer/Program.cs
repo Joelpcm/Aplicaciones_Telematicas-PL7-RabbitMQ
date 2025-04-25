@@ -22,13 +22,25 @@ namespace Producer
                     // En primer lugar se declara una cola
                     channel.QueueDeclare("ColaAT", false, false, false, null);
 
-                    // Generamos un número aleatorio entre 1 y 5
-                    Random random = new Random();
-                    int randomNumber = random.Next(1, 6); // Genera de 1 - 5
+                    // Para hacer 10 tareas de 1 segundo y 1 de 10 segundos
+                    int Number_1 = 1;
+                    int Number_2 = 10;
 
-                    // Se crea un mensaje que incluye el número aleatorio
-                    string message = $"{DateTime.Now} - Mensaje de prueba - {randomNumber.ToString()}";
-                    byte[] body = Encoding.UTF8.GetBytes(message);
+                    string message;
+                    byte[] body;
+
+                    for (int i = 0; i < 10; i++)
+                    {    
+                        // Se crea un mensaje que incluye el número aleatorio
+                        message = $"{DateTime.Now} - Mensaje de prueba - {Number_1.ToString()}";
+                        body = Encoding.UTF8.GetBytes(message);
+                        // Se publica un mensaje en la cola
+                        channel.BasicPublish("", "ColaAT", null, body);
+                        Console.WriteLine("Enviado el mensaje: {0}", message);
+                    }
+                    // Se crea un mensaje que incluye el número
+                    message = $"{DateTime.Now} - Mensaje de prueba - {Number_2.ToString()}";
+                    body = Encoding.UTF8.GetBytes(message);
 
                     // Se publica un mensaje en la cola
                     channel.BasicPublish("", "ColaAT", null, body);
